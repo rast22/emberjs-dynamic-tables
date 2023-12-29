@@ -7,5 +7,7 @@ export default class Router extends EmberRouter {
 }
 
 Router.map(function () {
-  // Add route declarations here
+  this.route('index', { path: '/' }); // Explicitly define the main route (optional if using the default 'index' route)
+
+  this.route('index', { path: '*' }); // Wildcard route to catch all undefined routes
 });
