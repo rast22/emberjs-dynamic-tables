@@ -8,25 +8,55 @@ import { inject as service } from '@ember/service';
 export default class MainTableComponent extends Component {
   @tracked tableData: any = [];
   @service store: Store;
+  @tracked isLoading = false;
+  @tracked currentPage = 1;
+  @tracked totalItems = 0;
+  @tracked itemsPerPage = 10;
+  @tracked totalPages = 0;
 
   constructor(owner: Owner, args: any) {
     super(owner, args);
     this.store = owner.lookup('service:store');
+    this.loadKeywordsResults();
   }
 
   @action
   async loadKeywordsResults() {
-    console.log('store', this.store);
-    this.store
-      .findAll('keyword', {})
-      .then((a) => {
-        console.log(a);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    const a = await this.store.findAll('keyword', {});
-    console.log(a);
-    this.tableData = a;
+    this.isLoading = true;
+    try {
+      const queryParams = {
+        page: this.currentPage,
+        perPage: this.itemsPerPage,
+      };
+
+      const a = await this.store.query('keyword', queryParams);
+      this.totalItems = a['meta']['totalItems'];
+      this.totalPages = a['meta']['totalPages'];
+      this.tableData = a;
+    } catch (e) {
+      console.error(e);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  @action
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.changePage(this.currentPage + 1);
+    }
+  }
+
+  @action
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.changePage(this.currentPage - 1);
+    }
+  }
+
+  @action
+  changePage(newPage:number) {
+    this.currentPage = newPage;
+    this.loadKeywordsResults();
   }
 }

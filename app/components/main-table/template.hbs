@@ -1,47 +1,69 @@
-<button class="bg-amber-600 w-20" type="button" {{on "click" this.loadKeywordsResults}}>Load Data</button>
+<div class="w-full h-full flex flex-col justify-center items-center">
+  {{#if this.isLoading  }}
+    <LoadingIndicator />
+  {{else}}
+    <div class="flex flex-col">
 
-<div class="w-full h-full flex justify-center items-center">
-  <table class="table-auto">
-    <thead class="uppercase text-left">
-    <tr>
-      <th scope="col" class="px-6 py-3">
-        Id</th>
-      <th scope="col" class="px-6 py-3">
-        Query</th>
-      <th scope="col" class="px-6 py-3">
-        Last processed at</th>
-      <th scope="col" class="px-6 py-3">
-        Position</th>
-      <th scope="col" class="px-6 py-3">
-        Result count</th>
-      <th scope="col" class="px-6 py-3">
-        Competitor rank</th>
-      <th scope="col" class="px-6 py-3">
-        Competitor rank type</th>
-    </tr>
-    </thead>
-    <tbody>
-        {{#each this.tableData as |dataItem|}}
-            <tr class="odd:bg-white  even:bg-gray-50 border-b ">
-              <td class="px-6 py-4">
-                {{dataItem.id}}</td>
-              <td class="px-6 py-4">
-                {{dataItem.query}}</td>
-              <td class="px-6 py-4">
-                {{date dataItem.last_processed_at}}</td>
-              <td class="px-6 py-4">
-                {{if dataItem.position dataItem.position 'no position :('}}</td>
-              <td class="px-6 py-4">
-                {{dataItem.results_count}}</td>
-              <td class="px-6 py-4">
-                99</td>
-              <td class="px-6 py-4">
-                99</td>
-            </tr>
-        {{/each}}
+    <table class="table-auto mb-6">
+      <thead class="uppercase text-left">
+      <tr>
+        <th scope="col" class="px-6 py-3">
+          Id</th>
+        <th scope="col" class="px-6 py-3">
+          Query</th>
+        <th scope="col" class="px-6 py-3">
+          Last processed at</th>
+        <th scope="col" class="px-6 py-3">
+          Position</th>
+        <th scope="col" class="px-6 py-3">
+          Result count</th>
+        <th scope="col" class="px-6 py-3">
+          Competitor rank</th>
+        <th scope="col" class="px-6 py-3">
+          Competitor rank type</th>
+      </tr>
+      </thead>
+      <tbody>
+      {{#each this.tableData as |dataItem|}}
+        <tr class="odd:bg-white  even:bg-gray-50 border-b ">
+          <td class="px-6 py-4">
+            {{dataItem.id}}</td>
+          <td class="px-6 py-4">
+            {{dataItem.query}}</td>
+          <td class="px-6 py-4">
+            {{date dataItem.last_processed_at}}</td>
+          <td class="px-6 py-4">
+            {{if dataItem.position dataItem.position 'no position :('}}</td>
+          <td class="px-6 py-4">
+            {{dataItem.results_count}}</td>
+          <td class="px-6 py-4">
+            99</td>
+          <td class="px-6 py-4">
+            99</td>
+        </tr>
+      {{/each}}
 
-  </tbody>
-  </table>
+      </tbody>
+    </table>
+      <div class="flex w-full items-center justify-between">
+        <button
+          class="bg-teal-300 hover:bg-teal-400 font-bold py-2 px-4 rounded-l focus:outline-none focus:shadow-outline disabled:bg-teal-100 disabled:text-gray-300 disabled:cursor-not-allowed select-none"
+          {{on "click" this.previousPage}}
+          disabled={{lt this.currentPage 2}}>
+          Previous
+        </button>
+
+        <span class="mx-2">Page {{this.currentPage}} of {{this.totalPages}}</span>
+
+        <button
+          class="bg-lime-300 hover:bg-lime-400 font-bold py-2 px-4 rounded-r focus:outline-none focus:shadow-outline disabled:bg-lime-200 disabled:text-gray-300 disabled:cursor-not-allowed"
+          {{on "click" this.nextPage}}
+          disabled={{gte this.currentPage this.totalPages}}>
+          Next
+        </button>
+      </div>
+    </div>
+  {{/if}}
 </div>
 
 
