@@ -1,56 +1,62 @@
 # emberjs-dynamic-tables
 
-This README outlines the details of collaborating on this Ember application.
-A short introduction of this app could easily go here.
+The basic EmberJS app that displays a table with dynamic columns. It uses Ember Mirage as a mock api and can be ran from docker-compose or npm. 
 
 ## Prerequisites
 
-You will need the following things properly installed on your computer.
+You will need the following things installed on your computer.
 
 * [Git](https://git-scm.com/)
 * [Node.js](https://nodejs.org/) (with npm)
-* [Ember CLI](https://cli.emberjs.com/release/)
-* [Google Chrome](https://google.com/chrome/)
+* [Docker](https://www.docker.com/) (for Docker Compose method)
 
 ## Installation
 
-* `git clone <repository-url>` this repository
-* `cd emberjs-dynamic-tables`
+* `git clone https://github.com/rast22/emberjs-dynamic-tables.git` 
+* `cd emberjs-dynamic-tables` (if not already in the directory)
+
+## Running 
+
+### Using npm
+
 * `npm install`
-
-## Running / Development
-
-* `npm run start`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
-* Visit your tests at [http://localhost:4200/tests](http://localhost:4200/tests).
 
-### Code Generators
+### Using Docker Compose
 
-Make use of the many generators for code, try `ember help generate` for more details
+* Ensure Docker is running on your machine.
+* `docker-compose up` (builds and starts the container)
+* Visit your app at [http://localhost:4200](http://localhost:4200).
 
-### Running Tests
+## Development Progress
 
-* `npm run test`
-* `npm run test:ember -- --server`
+- **Application Setup** - ![100%](https://progress-bar.dev/100) 
+  - [x] Set up a new Ember.js application. 
+  - [x] Ensure the application uses the latest Ember.js version.
 
-### Linting
+- **Data Model** - ![100%](https://progress-bar.dev/100)
+  - [x] Define a data model based on `keywords-results.json`.
 
-* `npm run lint`
-* `npm run lint:fix`
+- **API Integration** - ![100%](https://progress-bar.dev/100)
+  - [x] Simulate an API using Ember's Mirage.
+  - [x] The API returns data in JSON format.
 
-### Building
+- **Data Loading and Rendering** - ![100%](https://progress-bar.dev/100)
+  - [x] Implement a service in Ember.js to fetch data.
+  - [x] Display a loading indicator while fetching data.
 
-* `npm exec ember build` (development)
-* `npm run build` (production)
+- **Dynamic Columns** ![0%](https://progress-bar.dev/0)
+  - [ ] Logic to dynamically load table data.
 
-### Deploying
+- **Table Implementation** - ![50%](https://progress-bar.dev/50)
+  - [x] Use Ember components for table structure.
+  - [ ] Implement sorting/filtering if desired.
 
-Specify what it takes to deploy your app.
+- **Error Handling** - ![20%](https://progress-bar.dev/20)
+  - [ ] Implement error handling for data fetching.
 
-## Further Reading / Useful Links
+- **Testing** - ![0%](https://progress-bar.dev/0)
+  - [ ] Write unit tests covering dynamic functionality.
 
-* [ember.js](https://emberjs.com/)
-* [ember-cli](https://cli.emberjs.com/release/)
-* Development Browser Extensions
-  * [ember inspector for chrome](https://chrome.google.com/webstore/detail/ember-inspector/bmdblncegkenkacieihfhpjfppoconhi)
-  * [ember inspector for firefox](https://addons.mozilla.org/en-US/firefox/addon/ember-inspector/)
+- **Documentation** - ![80%](https://progress-bar.dev/80)
+  - [ ] Clear documentation on setup and running the application.
