@@ -45,8 +45,8 @@ You will need the following things installed on your computer.
   - [x] Implement a service in Ember.js to fetch data.
   - [x] Display a loading indicator while fetching data.
 
-- **Dynamic Columns** ![0%](https://progress-bar.dev/0)
-  - [ ] Logic to dynamically load table data.
+- **Dynamic Columns** ![100%](https://progress-bar.dev/100)
+  - [x] Logic to dynamically load table data.
 
 - **Table Implementation** - ![50%](https://progress-bar.dev/50)
   - [x] Use Ember components for table structure.
@@ -58,5 +58,5 @@ You will need the following things installed on your computer.
 - **Testing** - ![0%](https://progress-bar.dev/0)
   - [ ] Write unit tests covering dynamic functionality.
 
-- **Documentation** - ![80%](https://progress-bar.dev/80)
+- **Documentation** - ![90%](https://progress-bar.dev/90)
   - [ ] Clear documentation on setup and running the application.

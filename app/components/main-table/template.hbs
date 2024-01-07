@@ -2,9 +2,8 @@
   {{#if this.isLoading  }}
     <LoadingIndicator />
   {{else}}
-    <div class="flex flex-col">
-
-    <table class="table-auto mb-6">
+    <table class="table-auto mb-6 w-[90%] max-w-[90%]  min-w-[90%]">
+      <!-- Table head -->
       <thead class="uppercase text-left">
       <tr>
         <th scope="col" class="px-6 py-3">
@@ -18,34 +17,60 @@
         <th scope="col" class="px-6 py-3">
           Result count</th>
         <th scope="col" class="px-6 py-3">
+          Select competitor</th>
+        <th scope="col" class="px-6 py-3">
           Competitor rank</th>
         <th scope="col" class="px-6 py-3">
           Competitor rank type</th>
       </tr>
       </thead>
+      <!-- Table body -->
       <tbody>
-      {{#each this.tableData as |dataItem|}}
-        <tr class="odd:bg-white  even:bg-gray-50 border-b ">
-          <td class="px-6 py-4">
+      {{#each this.currentRows as |dataItem|}}
+        <tr class="odd:bg-white  even:bg-gray-50 border-b">
+          <td class="px-6 py-4 max-w-20 ">
             {{dataItem.id}}</td>
-          <td class="px-6 py-4">
-            {{dataItem.query}}</td>
-          <td class="px-6 py-4">
+          <td class="px-6 py-4 truncate hover:text-clip min-w-30 w-50 max-w-50" >
+            {{dataItem.query}} </td>
+          <td class="px-6 py-4 truncate hover:text-clip w-15">
             {{date dataItem.last_processed_at}}</td>
-          <td class="px-6 py-4">
+          <td class="px-6 py-4 truncate hover:text-clip max-w-20">
             {{if dataItem.position dataItem.position 'no position :('}}</td>
-          <td class="px-6 py-4">
+          <td class="px-6 py-4 truncate hover:text-clip max-w-40">
             {{dataItem.results_count}}</td>
-          <td class="px-6 py-4">
-            99</td>
-          <td class="px-6 py-4">
-            99</td>
+          <td class="px-6 py-4 max-w-40">
+            <label for="{{dataItem.id}}" class="sr-only">Select competitor</label>
+            <select onchange={{this.selectCompetitor}} id="{{dataItem.id}}" class="s">
+              <option selected disabled>  {{#if (gt dataItem.competitors.length 0)}}
+                Select a competitor
+              {{else}}
+                --
+              {{/if}}</option>
+              {{#each dataItem.competitors as |competitor|}}
+                 <option value={{competitor}}>{{competitor}}</option>
+              {{/each }}
+            </select>
+          </td>
+          <td class="px-6 py-4 truncate hover:text-clip max-w-20">
+            {{#if dataItem.selected_competitor  }}
+              {{ this.getCompetitorRank dataItem}}
+            {{else}}
+              --
+            {{/if}}
+          </td>
+          <td class="px-6 py-4 truncate hover:text-clip max-w-20">
+            {{#if dataItem.selected_competitor  }}
+              {{ this.getCompetitorRankType dataItem}}
+            {{else}}
+              --
+            {{/if}}
+          </td>
         </tr>
       {{/each}}
 
       </tbody>
     </table>
-      <div class="flex w-full items-center justify-between">
+      <div class="w-[80%] flex items-center justify-between">
         <button
           class="bg-teal-300 hover:bg-teal-400 font-bold py-2 px-4 rounded-l focus:outline-none focus:shadow-outline disabled:bg-teal-100 disabled:text-gray-300 disabled:cursor-not-allowed select-none"
           {{on "click" this.previousPage}}
@@ -62,7 +87,6 @@
           Next
         </button>
       </div>
-    </div>
   {{/if}}
 </div>
 

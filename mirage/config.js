@@ -1,32 +1,49 @@
-import {
-  discoverEmberDataModels,
-  // applyEmberDataSerializers,
-} from 'ember-cli-mirage';
-import { createServer } from 'miragejs';
+  import {
+    discoverEmberDataModels,
+    // applyEmberDataSerializers,
+  } from 'ember-cli-mirage';
+  import { createServer } from 'miragejs';
 
-export default function (config) {
-  let finalConfig = {
-    ...config,
-    models: {
-      ...discoverEmberDataModels(config.store),
-    },
-    routes,
-  };
+  export default function (config) {
+    let finalConfig = {
+      ...config,
+      models: {
+        ...discoverEmberDataModels(config.store),
+      },
+      routes,
+    };
 
-  return createServer(finalConfig);
-}
+    return createServer(finalConfig);
+  }
 
-function routes() {
-  this.namespace = '/api';
-  this.get('/keywords', (schema, request) => {
-    const page = parseInt(request.queryParams.page, 10) || 1;
-    const perPage = parseInt(request.queryParams.perPage, 10) || 10;
+  function routes() {
+    this.namespace = '/api';
 
-    const totalItems = schema.keywords.all().length;
-    const paginatedData = schema.keywords.all().slice((page - 1) * perPage, page * perPage);
+    this.get('/competitors', (schema, request) => {
+      let keyword_id = request.queryParams.keyword_id;
+      let competitor_id = request.queryParams.competitor;
 
-    return {
-      data: paginatedData.models.map(model => {
+      const keywordCompetitorsList = schema.competitors.find(keyword_id);
+      let competitorData = keywordCompetitorsList.competitor_results[competitor_id];
+
+      return {
+        data: {
+          type: 'competitor',
+          id: competitor_id,
+          attributes: {
+            rank: competitorData.rank,
+            rank_type: competitorData.rank_type
+          },
+        },
+      };
+    });
+
+
+    this.get('/keywords', (schema, request) => {
+      const competitorsList = schema.competitors.all();
+
+      let mutatedArray = schema.keywords.all().models.map(model => {
+        let competitors = Object.keys(competitorsList.models.find((competitor) => competitor.id === model.id).competitor_results);
         return {
           type: 'keyword',
           id: model.id,
@@ -35,15 +52,10 @@ function routes() {
             last_processed_at: model.last_processed_at,
             position: model.position,
             results_count: model.results_count,
+            competitors
           },
         };
-      }),
-      meta: {
-        totalItems: totalItems,
-        perPage: perPage,
-        page: page,
-        totalPages: Math.ceil(totalItems / perPage),
-      },
-    };
-  });
-}
+      });
+      return {data: mutatedArray};
+    });
+  }
