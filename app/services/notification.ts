@@ -19,7 +19,7 @@ export default class NotificationService extends Service {
     later(
       this,
       () => {
-        this.messages = [...this.messages, notificationMessage];
+        this.messages = [notificationMessage, ...this.messages];
 
         // Hide the message after the duration
         later(

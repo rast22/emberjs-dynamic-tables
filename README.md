@@ -17,6 +17,8 @@ You will need the following things installed on your computer.
 
 ## Running 
 
+**important**: If you want to check error notifications manually, please go to `config/enviroment.js` and change the variable in mirageConfig `enableRandomErrors`  to `true`. And then restart the app.
+
 ### Using npm
 
 * `npm install`

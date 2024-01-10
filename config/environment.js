@@ -13,6 +13,10 @@ module.exports = function (environment) {
         // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
     },
+    // Change this to true to enable random errors for manual testing
+    mirageConfig: {
+      enableRandomErrors: true,
+    },
 
     APP: {
       // Here you can pass flags/options to your application instance
