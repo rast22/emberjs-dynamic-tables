@@ -1,9 +1,9 @@
 <div class="w-full h-full flex flex-col justify-center items-center">
-  {{#if this.isLoading  }}
+  {{#if this.isLoading   }}
     <LoadingIndicator />
-  {{else}}
-    <table class="table-auto mb-6 w-[90%] max-w-[90%]  min-w-[90%]">
-      <!-- Table head -->
+  {{else if (not this.loadError)}}
+    <table class="table-auto mb-6 w-[80%] max-w-[80%]  min-w-[80%]">
+      {{!-- Table head --}}
       <thead class="uppercase text-left">
       <tr>
         <th scope="col" class="px-6 py-3">
@@ -24,7 +24,7 @@
           Competitor rank type</th>
       </tr>
       </thead>
-      <!-- Table body -->
+      {{!-- Table body --}}
       <tbody>
       {{#each this.currentRows as |dataItem|}}
         <tr class="odd:bg-white  even:bg-gray-50 border-b">
@@ -72,21 +72,19 @@
     </table>
       <div class="w-[80%] flex items-center justify-between">
         <button
-          class="bg-teal-300 hover:bg-teal-400 font-bold py-2 px-4 rounded-l focus:outline-none focus:shadow-outline disabled:bg-teal-100 disabled:text-gray-300 disabled:cursor-not-allowed select-none"
-          {{on "click" this.previousPage}}
-          disabled={{lt this.currentPage 2}}>
+          class="bg-teal-300 hover:bg-teal-400 font-bold py-2 px-4 rounded-l focus:outline-none focus:shadow-outline disabled:bg-teal-100 disabled:text-gray-300 disabled:cursor-not-allowed select-none" disabled={{lt this.currentPage 2}} type="button" {{on "click" this.previousPage}}>
           Previous
         </button>
 
         <span class="mx-2">Page {{this.currentPage}} of {{this.totalPages}}</span>
 
         <button
-          class="bg-lime-300 hover:bg-lime-400 font-bold py-2 px-4 rounded-r focus:outline-none focus:shadow-outline disabled:bg-lime-200 disabled:text-gray-300 disabled:cursor-not-allowed"
-          {{on "click" this.nextPage}}
-          disabled={{gte this.currentPage this.totalPages}}>
+          class="bg-lime-300 hover:bg-lime-400 font-bold py-2 px-4 rounded-r focus:outline-none focus:shadow-outline disabled:bg-lime-200 disabled:text-gray-300 disabled:cursor-not-allowed" disabled={{gte this.currentPage this.totalPages}} type="button" {{on "click" this.nextPage}}>
           Next
         </button>
       </div>
+  {{else}}
+    <button {{on "click" this.loadKeywordsResults}} class="bg-lime-300 hover:bg-pink-300 font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"> Reload</button>
   {{/if}}
 </div>
 

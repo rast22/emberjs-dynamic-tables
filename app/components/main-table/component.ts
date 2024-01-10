@@ -4,15 +4,24 @@ import type Owner from '@ember/owner';
 import { action } from '@ember/object';
 import Store from '@ember-data/store';
 import { inject as service } from '@ember/service';
-import type KeywordModel from "emberjs-dynamic-tables/models/keyword";
+import type KeywordModel from 'emberjs-dynamic-tables/models/keyword';
+import type NotificationService from "emberjs-dynamic-tables/services/notification";
 
 export default class MainTableComponent extends Component {
-
   // data variables
   @tracked tableData: any = [];
-  @service store: Store;
-  @tracked competitors = new Map<string, { rank: number | null; rank_type: string | null } >();
+  @service store!: Store;
+  @tracked competitors = new Map<
+    string,
+    { rank: number | null; rank_type: string | null }
+  >();
+
+  // component state variables
   @tracked isLoading = false;
+  @tracked loadError: boolean = false;
+
+  // notifications variables
+  @service('notification') notificationService!: NotificationService ;
 
   // pagination variables
   @tracked currentPage = 1;
@@ -33,8 +42,12 @@ export default class MainTableComponent extends Component {
       const response = await this.store.findAll('keyword');
       this.tableData = response;
       this.innitPagination();
+      this.notificationService.show('Data successfully fetched', 'success');
+      this.loadError = false;
     } catch (e) {
       console.error(e);
+      this.loadError = true;
+      this.notificationService.show('Error fetching data, please reload the page or click the reload button', 'error');
     } finally {
       this.isLoading = false;
     }
@@ -43,7 +56,10 @@ export default class MainTableComponent extends Component {
   @action
   nextPage() {
     if (this.currentPage < this.totalPages) {
-      this.currentRows = this.tableData.slice(this.itemsPerPage * this.currentPage, this.itemsPerPage * (this.currentPage + 1))
+      this.currentRows = this.tableData.slice(
+        this.itemsPerPage * this.currentPage,
+        this.itemsPerPage * (this.currentPage + 1),
+      );
       this.changePage(this.currentPage + 1);
     }
   }
@@ -51,13 +67,16 @@ export default class MainTableComponent extends Component {
   @action
   previousPage() {
     if (this.currentPage > 1) {
-      this.currentRows = this.tableData.slice(this.itemsPerPage * (this.currentPage - 2), this.itemsPerPage * (this.currentPage - 1))
+      this.currentRows = this.tableData.slice(
+        this.itemsPerPage * (this.currentPage - 2),
+        this.itemsPerPage * (this.currentPage - 1),
+      );
       this.changePage(this.currentPage - 1);
     }
   }
 
   @action
-  changePage(newPage:number) {
+  changePage(newPage: number) {
     this.currentPage = newPage;
   }
 
@@ -77,27 +96,38 @@ export default class MainTableComponent extends Component {
 
     try {
       // Check if we already have the competitor data
-      if(!this.competitors.has(compositeKey)) {
-        let competitorData = await this.store.queryRecord('competitor', { keyword_id: keyword_id, competitor: competitor_id });
+      if (!this.competitors.has(compositeKey)) {
+        const competitorData = await this.store.queryRecord('competitor', {
+          keyword_id: keyword_id,
+          competitor: competitor_id,
+        });
 
         // Find keyword to update selected competitor state
-        let keywordToUpdate = this.tableData.find((keyword: KeywordModel) => keyword.id === keyword_id);
+        const keywordToUpdate = this.tableData.find(
+          (keyword: KeywordModel) => keyword.id === keyword_id,
+        );
         if (keywordToUpdate) {
           keywordToUpdate.selected_competitor = competitor_id;
 
           // Add competitors to map
-          this.competitors.set(compositeKey, { rank: competitorData.rank, rank_type: competitorData.rank_type });
-
+          this.competitors.set(compositeKey, {
+            rank: competitorData.rank,
+            rank_type: competitorData.rank_type,
+          });
         }
       } else {
-        let keywordToUpdate = this.tableData.find((keyword: KeywordModel) => keyword.id === keyword_id);
+        const keywordToUpdate = this.tableData.find(
+          (keyword: KeywordModel) => keyword.id === keyword_id,
+        );
         if (keywordToUpdate) {
           keywordToUpdate.selected_competitor = competitor_id;
         }
       }
-      console.log('competitors', this.competitors)
+      this.notificationService.show('Data successfully fetched', 'success');
     } catch (e) {
       console.error('Error fetching competitor data:', e);
+      this.notificationService.show('Error fetching competitors data, please select another one', 'error');
+
     }
   }
 
@@ -142,7 +172,6 @@ export default class MainTableComponent extends Component {
   innitPagination() {
     this.totalItems = this.tableData.length;
     this.totalPages = Math.ceil(this.totalItems / this.itemsPerPage);
-    this.currentRows = this.tableData.slice(0, this.itemsPerPage)
+    this.currentRows = this.tableData.slice(0, this.itemsPerPage);
   }
-
 }

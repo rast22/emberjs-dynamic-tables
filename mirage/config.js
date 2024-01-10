@@ -1,30 +1,37 @@
-  import {
-    discoverEmberDataModels,
-    // applyEmberDataSerializers,
-  } from 'ember-cli-mirage';
-  import { createServer } from 'miragejs';
+import {
+  discoverEmberDataModels,
+  // applyEmberDataSerializers,
+} from 'ember-cli-mirage';
+import { createServer } from 'miragejs';
 
-  export default function (config) {
-    let finalConfig = {
-      ...config,
-      models: {
-        ...discoverEmberDataModels(config.store),
-      },
-      routes,
-    };
+export default function (config) {
+  let finalConfig = {
+    ...config,
+    models: {
+      ...discoverEmberDataModels(config.store),
+    },
+    routes,
+  };
 
-    return createServer(finalConfig);
-  }
+  return createServer(finalConfig);
+}
 
-  function routes() {
-    this.namespace = '/api';
+/** Building a route handler */
+function routes() {
+  this.namespace = '/api';
 
-    this.get('/competitors', (schema, request) => {
+  // defining a route handler for GET /api/keywords
+  this.get('/competitors', (schema, request) => {
+    // Random errors
+    if (Math.random() > 0.5) {
+      return new Response(500, {}, { errors: ['Server Error'] });
+    } else {
       let keyword_id = request.queryParams.keyword_id;
       let competitor_id = request.queryParams.competitor;
 
       const keywordCompetitorsList = schema.competitors.find(keyword_id);
-      let competitorData = keywordCompetitorsList.competitor_results[competitor_id];
+      let competitorData =
+        keywordCompetitorsList.competitor_results[competitor_id];
 
       return {
         data: {
@@ -32,18 +39,26 @@
           id: competitor_id,
           attributes: {
             rank: competitorData.rank,
-            rank_type: competitorData.rank_type
+            rank_type: competitorData.rank_type,
           },
         },
       };
-    });
+    }
+  });
 
-
-    this.get('/keywords', (schema, request) => {
+  // defining a route handler for GET /api/keywords
+  this.get('/keywords', (schema, request) => {
+    // Random errors
+    if (Math.random() > 0.5) {
+      return new Response(500, {}, { errors: ['Server Error'] });
+    } else {
       const competitorsList = schema.competitors.all();
 
-      let mutatedArray = schema.keywords.all().models.map(model => {
-        let competitors = Object.keys(competitorsList.models.find((competitor) => competitor.id === model.id).competitor_results);
+      let mutatedArray = schema.keywords.all().models.map((model) => {
+        let competitors = Object.keys(
+          competitorsList.models.find((competitor) => competitor.id === model.id)
+            .competitor_results,
+        );
         return {
           type: 'keyword',
           id: model.id,
@@ -52,10 +67,11 @@
             last_processed_at: model.last_processed_at,
             position: model.position,
             results_count: model.results_count,
-            competitors
+            competitors,
           },
         };
       });
-      return {data: mutatedArray};
-    });
-  }
+      return { data: mutatedArray };
+    }
+  });
+}

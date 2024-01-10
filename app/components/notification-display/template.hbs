@@ -1,0 +1,7 @@
+<div class="flex flex-col w-full justify-center items-center">
+  {{#each this.notificationService.messages as |message|}}
+    <div class=" notification {{message.type}} flex w-[80%] max-w-[80%] mx-8 my-2 items-center justify-center py-4 rounded-lg" role="alert">
+      <span class="block sm:inline">{{message.message}}</span>
+    </div>
+  {{/each}}
+</div>
