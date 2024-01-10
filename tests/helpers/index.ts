@@ -4,6 +4,8 @@ import {
   setupTest as upstreamSetupTest,
   type SetupTestOptions,
 } from 'ember-qunit';
+import setupSinon from "ember-sinon-qunit";
+import {setupMirage} from "ember-cli-mirage/test-support";
 
 // This file exists to provide wrappers around ember-qunit's
 // test setup functions. This way, you can easily extend the setup that is
@@ -11,27 +13,23 @@ import {
 
 function setupApplicationTest(hooks: NestedHooks, options?: SetupTestOptions) {
   upstreamSetupApplicationTest(hooks, options);
-
-  // Additional setup for application tests can be done here.
-  //
-  // For example, if you need an authenticated session for each
-  // application test, you could do:
-  //
-  // hooks.beforeEach(async function () {
-  //   await authenticateSession(); // ember-simple-auth
-  // });
-  //
-  // This is also a good place to call test setup functions coming
-  // from other addons:
-  //
-  // setupIntl(hooks); // ember-intl
-  // setupMirage(hooks); // ember-cli-mirage
+  setupSinon();
+  // Setup Mirage for mocking API calls
+  setupMirage(hooks);
 }
 
 function setupRenderingTest(hooks: NestedHooks, options?: SetupTestOptions) {
   upstreamSetupRenderingTest(hooks, options);
+  setupMirage(hooks);
 
   // Additional setup for rendering tests can be done here.
+}
+
+function setupRenderingContext(hooks: NestedHooks, options?: SetupTestOptions) {
+  upstreamSetupRenderingTest(hooks, options);
+  setupSinon();
+  setupMirage(hooks);
+
 }
 
 function setupTest(hooks: NestedHooks, options?: SetupTestOptions) {
@@ -40,4 +38,4 @@ function setupTest(hooks: NestedHooks, options?: SetupTestOptions) {
   // Additional setup for unit tests can be done here.
 }
 
-export { setupApplicationTest, setupRenderingTest, setupTest };
+export { setupApplicationTest, setupRenderingTest, setupTest, setupRenderingContext };

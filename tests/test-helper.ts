@@ -8,5 +8,4 @@ import { start } from 'ember-qunit';
 setApplication(Application.create(config.APP));
 
 setup(QUnit.assert);
-
 start();

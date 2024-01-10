@@ -37,10 +37,10 @@
           <td class="px-6 py-4 truncate hover:text-clip max-w-20">
             {{if dataItem.position dataItem.position 'no position :('}}</td>
           <td class="px-6 py-4 truncate hover:text-clip max-w-40">
-            {{dataItem.results_count}}</td>
+            {{if dataItem.results_count dataItem.results_count 'No available data'}}</td>
           <td class="px-6 py-4 max-w-40">
             <label for="{{dataItem.id}}" class="sr-only">Select competitor</label>
-            <select onchange={{this.selectCompetitor}} id="{{dataItem.id}}" class="s">
+            <select onchange={{this.selectCompetitor}} id="{{dataItem.id}}" class="competitor-rank-display">
               <option selected disabled>  {{#if (gt dataItem.competitors.length 0)}}
                 Select a competitor
               {{else}}
@@ -55,14 +55,14 @@
             {{#if dataItem.selected_competitor  }}
               {{ this.getCompetitorRank dataItem}}
             {{else}}
-              --
+              <span class="no-competitor-data">--</span>
             {{/if}}
           </td>
           <td class="px-6 py-4 truncate hover:text-clip max-w-20">
             {{#if dataItem.selected_competitor  }}
               {{ this.getCompetitorRankType dataItem}}
             {{else}}
-              --
+              <span class="no-competitor-data">--</span>
             {{/if}}
           </td>
         </tr>
@@ -84,7 +84,7 @@
         </button>
       </div>
   {{else}}
-    <button {{on "click" this.loadKeywordsResults}} class="bg-lime-300 hover:bg-pink-300 font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline"> Reload</button>
+    <button class="bg-lime-300 hover:bg-pink-300 font-bold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline" type="button" {{on "click" this.loadKeywordsResults}}> Reload</button>
   {{/if}}
 </div>
 

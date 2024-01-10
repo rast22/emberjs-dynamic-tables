@@ -8,27 +8,39 @@ export default class NotificationService extends Service {
   @tracked messages: NotificationMessage[] = [];
 
   @action
-  show(message: string, type: NotificationMessage['type'] = 'info', duration = 2000) {
+  show(
+    message: string,
+    type: NotificationMessage['type'] = 'info',
+    duration = 2000,
+  ) {
     const notificationMessage = { message, type, duration, visible: true };
 
     // Update messages in a new run loop to avoid immediate reactivity issues
-    later(this, () => {
-      this.messages = [...this.messages, notificationMessage];
+    later(
+      this,
+      () => {
+        this.messages = [...this.messages, notificationMessage];
 
-      // Hide the message after the duration
-      later(this, () => {
-        this.messages = this.messages.map(msg => {
-          if (msg === notificationMessage) {
-            return { ...msg, visible: false };
-          }
-          return msg;
-        }).filter(msg => msg.visible);
-      }, duration);
-    }, 0);
+        // Hide the message after the duration
+        later(
+          this,
+          () => {
+            this.messages = this.messages
+              .map((msg) => {
+                if (msg === notificationMessage) {
+                  return { ...msg, visible: false };
+                }
+                return msg;
+              })
+              .filter((msg) => msg.visible);
+          },
+          duration,
+        );
+      },
+      0,
+    );
   }
 }
-
-
 
 declare module '@ember/service' {
   interface Registry {

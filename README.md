@@ -20,6 +20,7 @@ You will need the following things installed on your computer.
 ### Using npm
 
 * `npm install`
+*  `ember serve` or `npm start`
 * Visit your app at [http://localhost:4200](http://localhost:4200).
 
 ### Using Docker Compose
@@ -27,6 +28,11 @@ You will need the following things installed on your computer.
 * Ensure Docker is running on your machine.
 * `docker-compose up` (builds and starts the container)
 * Visit your app at [http://localhost:4200](http://localhost:4200).
+
+## Running Tests
+
+* `npm install`
+*  `ember test` or `npm test:ember`
 
 ## Development Progress
 
@@ -52,11 +58,11 @@ You will need the following things installed on your computer.
   - [x] Use Ember components for table structure.
   - [ ] Implement sorting/filtering if desired.
 
-- **Error Handling** - ![20%](https://progress-bar.dev/20)
-  - [ ] Implement error handling for data fetching.
+- **Error Handling** - ![100%](https://progress-bar.dev/100)
+  - [x] Implement error handling for data fetching.
 
-- **Testing** - ![0%](https://progress-bar.dev/0)
-  - [ ] Write unit tests covering dynamic functionality.
+- **Testing** - ![90%](https://progress-bar.dev/90)
+  - [x] Write unit tests covering dynamic functionality.
 
 - **Documentation** - ![90%](https://progress-bar.dev/90)
-  - [ ] Clear documentation on setup and running the application.
+  - [x] Clear documentation on setup and running the application.

@@ -9,7 +9,8 @@
   margin: 0;
   padding: 0;
 }
-/* loader styles*/
+
+/* loader styles */
 .spinner {
   width: 3em;
   height: 3em;
@@ -43,7 +44,8 @@
     transform: rotate(360deg);
   }
 }
-/* notifications styles*/
+
+/* notifications styles */
 .notification.info {
   @apply bg-blue-500 text-white;
 }
