@@ -2,7 +2,34 @@
   {{#if this.isLoading   }}
     <LoadingIndicator />
   {{else if (not this.loadError)}}
-    <table class="table-auto mb-6 w-[80%] max-w-[80%]  min-w-[80%]">
+    <div class="w-full max-w-[80%]  flex flex-row justify-center">
+      <div class="items-center  px-3 py-2 bg-green-200 rounded-lg">
+        <label for="competitor-selection" class="sr-only">Select competitor</label>
+        <select onchange={{this.selectCompetitor}} id="competitor-selection" class="bg-green-200 competitor-rank-display">
+          <option selected disabled>Select competitor</option>
+          {{#each this.competitors as |competitor|}}
+            <option value={{competitor}}>{{competitor}}</option>
+          {{/each }}
+        </select>
+      </div>
+      {{#if (gt this.selectedCompetitor 0)}}
+        {{#if (gt this.allowedCols.length 0)}}
+          {{#each this.allowedCols as |column|}}
+            <div class="flex flex-row items-center ml-8 bg-green-300 px-3 py-2 rounded-lg">
+              <label for={{column.alias}} class="mr-2 select-none">{{column.name}}</label>
+              <input id={{column.alias}} type="checkbox" disabled={{if this.selectedCompetitor false true}} class="mr-2" checked={{column.selected}} onchange={{fn this.toggleColumn column.alias}} />
+            </div>
+          {{/each}}
+        {{else}}
+              Unfortunately, there are no available columns to display
+        {{/if}}
+      {{else}}
+        <div class="ml-8 self-center items-center text-center">
+          Please select a competitor to display allowed columns
+        </div>
+      {{/if}}
+    </div>
+    <table class="table-auto mb-6 w-[80%] max-w-[80%]  ">
       {{!-- Table head --}}
       <thead class="uppercase text-left">
       <tr>
@@ -16,12 +43,18 @@
           Position</th>
         <th scope="col" class="px-6 py-3">
           Result count</th>
-        <th scope="col" class="px-6 py-3">
-          Select competitor</th>
-        <th scope="col" class="px-6 py-3">
-          Competitor rank</th>
-        <th scope="col" class="px-6 py-3">
-          Competitor rank type</th>
+        {{#each this.allowedCols as |column|}}
+          {{#if column.selected}}
+            <th scope="col" class="px-6 py-3">
+              {{column.name}}</th>
+          {{/if}}
+        {{/each}}
+<!--        <th scope="col" class="px-6 py-3">-->
+<!--          Select competitor</th>-->
+<!--        <th scope="col" class="px-6 py-3">-->
+<!--          Competitor rank</th>-->
+<!--        <th scope="col" class="px-6 py-3">-->
+<!--          Competitor rank type</th>-->
       </tr>
       </thead>
       {{!-- Table body --}}
@@ -38,33 +71,40 @@
             {{if dataItem.position dataItem.position 'no position :('}}</td>
           <td class="px-6 py-4 truncate hover:text-clip max-w-40">
             {{if dataItem.results_count dataItem.results_count 'No available data'}}</td>
-          <td class="px-6 py-4 max-w-40">
-            <label for="{{dataItem.id}}" class="sr-only">Select competitor</label>
-            <select onchange={{this.selectCompetitor}} id="{{dataItem.id}}" class="competitor-rank-display">
-              <option selected disabled>  {{#if (gt dataItem.competitors.length 0)}}
-                Select a competitor
-              {{else}}
-                --
-              {{/if}}</option>
-              {{#each dataItem.competitors as |competitor|}}
-                 <option value={{competitor}}>{{competitor}}</option>
-              {{/each }}
-            </select>
-          </td>
-          <td class="px-6 py-4 truncate hover:text-clip max-w-20">
-            {{#if dataItem.selected_competitor  }}
-              {{ this.getCompetitorRank dataItem}}
-            {{else}}
-              <span class="no-competitor-data">--</span>
+          {{#each this.allowedCols as |column|}}
+            {{#if column.selected}}
+              <td class="px-6 py-4 truncate hover:text-clip max-w-40">
+                {{if (this.getCellData dataItem column) (this.getCellData dataItem column) 'No available data'}}
+              </td>
             {{/if}}
-          </td>
-          <td class="px-6 py-4 truncate hover:text-clip max-w-20">
-            {{#if dataItem.selected_competitor  }}
-              {{ this.getCompetitorRankType dataItem}}
-            {{else}}
-              <span class="no-competitor-data">--</span>
-            {{/if}}
-          </td>
+          {{/each}}
+<!--          <td class="px-6 py-4 max-w-40">-->
+<!--            <label for="{{dataItem.id}}" class="sr-only">Select competitor</label>-->
+<!--            <select onchange={{this.selectCompetitor}} id="{{dataItem.id}}" class="competitor-rank-display">-->
+<!--              <option selected disabled>  {{#if (gt dataItem.competitors.length 0)}}-->
+<!--                Select a competitor-->
+<!--              {{else}}-->
+<!--                ---->
+<!--              {{/if}}</option>-->
+<!--              {{#each dataItem.competitors as |competitor|}}-->
+<!--                 <option value={{competitor}}>{{competitor}}</option>-->
+<!--              {{/each }}-->
+<!--            </select>-->
+<!--          </td>-->
+<!--          <td class="px-6 py-4 truncate hover:text-clip max-w-20">-->
+<!--            {{#if dataItem.selected_competitor  }}-->
+<!--              {{ this.getCompetitorRank dataItem}}-->
+<!--            {{else}}-->
+<!--              <span class="no-competitor-data">--</span>-->
+<!--            {{/if}}-->
+<!--          </td>-->
+<!--          <td class="px-6 py-4 truncate hover:text-clip max-w-20">-->
+<!--            {{#if dataItem.selected_competitor  }}-->
+<!--              {{ this.getCompetitorRankType dataItem}}-->
+<!--            {{else}}-->
+<!--              <span class="no-competitor-data">--</span>-->
+<!--            {{/if}}-->
+<!--          </td>-->
         </tr>
       {{/each}}
 
