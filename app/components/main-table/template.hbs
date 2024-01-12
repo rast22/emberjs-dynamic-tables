@@ -2,7 +2,7 @@
   {{#if this.isLoading   }}
     <LoadingIndicator />
   {{else if (not this.loadError)}}
-    <div class="w-full max-w-[80%]  flex flex-row justify-center">
+    <div class="w-full max-w-[80%]  flex flex-row justify-start">
       <div class="items-center  px-3 py-2 bg-green-200 rounded-lg">
         <label for="competitor-selection" class="sr-only">Select competitor</label>
         <select onchange={{this.selectCompetitor}} id="competitor-selection" class="bg-green-200 competitor-rank-display">
@@ -29,6 +29,7 @@
         </div>
       {{/if}}
     </div>
+    <hr class="bg-gray-700 w-[80%] mt-4">
     <table class="table-auto mb-6 w-[80%] max-w-[80%]  ">
       {{!-- Table head --}}
       <thead class="uppercase text-left">
